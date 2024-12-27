@@ -55,7 +55,7 @@ trait Foo {
 ...it passes `update_fn` as a reference (`&Box<dyn FnOnce(...)>`). This creates a conflict:
 
  - We cannot move or invoke a `FnOnce` closure through a shared reference alone (that would violate Rust’s ownership rules).
- - We also cannot trivially Clone the contents of a `Box<dyn FnOnce(...)>` because `FnOnce` is inherently non-Clone.
+ - We also cannot trivially `Clone` the contents of a `Box<dyn FnOnce(...)>` because `FnOnce` is inherently non-Clone.
 
 ## Problem
 
@@ -74,8 +74,8 @@ E0308: mismatched types when trying to clone or store a `FnOnce` closure.
 
 1. Maintain the `FnOnce` type to ensure it can be consumed once.
 2. Must respect Rust’s ownership model (no illegal moves or clones).
-3. Remain asynchronous-friendly (the bar function is async).
-4. Use mockall for mocking.
+3. Remain asynchronous-friendly (the `bar` function is async).
+4. Use `mockall` for mocking.
 
 ## Solution Overview
 
@@ -87,7 +87,7 @@ Transfer Ownership after the mock call finishes, so you can invoke it exactly on
 This means:
 
  - In `withf`, you will not attempt to invoke the closure. Instead, you simply store it as-is (without dereferencing it) so you can move it later.
- - After the mock call occurs, retrieve the stored closure from the Arc<Mutex> and invoke it once in your test logic.
+ - After the mock call occurs, retrieve the stored closure from the `Arc<Mutex>` and invoke it once in your test logic.
 
 ## Detailed Steps
 
@@ -148,7 +148,7 @@ mock_foo
     .return_const(());
 
 ```
-*Note*: `update_fn.to_owned()` does not clone the closure contents (which is impossible for `FnOnce`), it only copies the Box pointer. This is allowed if the trait object is Sized enough at runtime. If you still get a mismatch error, see the next subsection in FAQ.
+*Note*: `update_fn.to_owned()` does not clone the closure contents (which is impossible for `FnOnce`), it only copies the `Box` pointer. This is allowed if the trait object is `Sized` enough at runtime. If you still get a mismatch error, see the next subsection in FAQ.
 
 4. Invoke the Mock
 ```rust
@@ -181,7 +181,7 @@ This means you’re assigning a reference to a slot that expects ownership. The 
 3. Can I directly invoke the closure inside `withf`?
 Usually not: `withf` provides a predicate that runs during matching, not the actual “business logic” place. Also, you’d lose the ability to verify the closure in your test if you call it before the function finishes.
 4. What if `update_fn.to_owned()` still fails because `Box<dyn FnOnce>` does not implement Clone?
-In practice, some setups do allow copying a pointer to the trait object. If your environment or Rust version complains, you may need a different strategy, such as capturing the Box further up the call chain or storing the closure in your own code before passing it to mockall. The gist is that you cannot truly “clone” a `FnOnce`; you can only store its pointer for deferred use.
+In practice, some setups do allow copying a pointer to the trait object. If your environment or Rust version complains, you may need a different strategy, such as capturing the `Box` further up the call chain or storing the closure in your own code before passing it to mockall. The gist is that you cannot truly “clone” a `FnOnce`; you can only store its pointer for deferred use.
 
 ## References
 
