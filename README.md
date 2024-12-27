@@ -185,8 +185,8 @@ In practice, some setups do allow copying a pointer to the trait object. If your
 
 ## References
 
-(Rust Reference on `FnOnce`)[https://doc.rust-lang.org/reference/types/closure.html]
-(The mockall crate on Docs.rs)[https://docs.rs/mockall/latest/mockall/]
-Common Rust Ownership Errors (E0507, E0308)
+- (Rust Reference on `FnOnce`)[https://doc.rust-lang.org/reference/types/closure.html]
+- (The mockall crate on Docs.rs)[https://docs.rs/mockall/latest/mockall/]
+- Common Rust Ownership Errors (E0507, E0308)
 
 Thank you for checking out this challenge! By following the solution steps above, you should be able to mock and test an async function that takes a `FnOnce` closure without violating Rust’s ownership rules.
