@@ -3,8 +3,6 @@ use mockall::automock;
 #[tokio::main]
 async fn main() {
     let foo = FooImpl {};
-    foo.bar(|zed| zed).await;
-
     let baz = BazImpl {};
     baz.baz(foo).await;
 }
