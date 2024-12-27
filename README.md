@@ -170,7 +170,7 @@ if let Some(update_fn) = captured_closure {
 
 ## Why Not Change `FnOnce` to `Fn`?
 
-Altering the trait to `Fn` or FnMut would make this simpler because those closures can be called multiple times or do not require full ownership. However, if your real-world scenario requires `FnOnce` (due to one-time consumption or resource management), switching to `Fn`/`FnMut` breaks the contract you’re testing. The challenge explicitly forbids using a different closure trait, so we have to respect `FnOnce`.
+Altering the trait to `Fn` or `FnMut` would make this simpler because those closures can be called multiple times or do not require full ownership. However, if your real-world scenario requires `FnOnce` (due to one-time consumption or resource management), switching `Fn` -> `FnMut` breaks the contract you are testing. The challenge explicitly forbids using a different closure trait, so we have to respect `FnOnce`.
 
 ## FAQ
 
