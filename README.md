@@ -31,12 +31,12 @@ where
 }
 ```
 
-...which we want to mock using mockall. The method takes a `FnOnce` closure. Unlike `Fn` or FnMut, a `FnOnce` closure:
+...which we want to mock using `mockall`. The method takes a `FnOnce` closure. Unlike `Fn` or `FnMut`, a `FnOnce` closure:
 
 1. Consumes the environment it captures.
 2. Can only be called once.
 
-When mockall generates a method signature like this:
+When `mockall` generates a method signature like this:
 
 ```rust
 trait Foo {
@@ -181,12 +181,12 @@ This means you’re assigning a reference to a slot that expects ownership. The 
 3. Can I directly invoke the closure inside `withf`?
 Usually not: `withf` provides a predicate that runs during matching, not the actual “business logic” place. Also, you’d lose the ability to verify the closure in your test if you call it before the function finishes.
 4. What if `update_fn.to_owned()` still fails because `Box<dyn FnOnce>` does not implement Clone?
-In practice, some setups do allow copying a pointer to the trait object. If your environment or Rust version complains, you may need a different strategy, such as capturing the `Box` further up the call chain or storing the closure in your own code before passing it to mockall. The gist is that you cannot truly “clone” a `FnOnce`; you can only store its pointer for deferred use.
+In practice, some setups do allow copying a pointer to the trait object. If your environment or Rust version complains, you may need a different strategy, such as capturing the `Box` further up the call chain or storing the closure in your own code before passing it to `mockall`. The gist is that you cannot truly “clone” a `FnOnce`; you can only store its pointer for deferred use.
 
 ## References
 
 - (Rust Reference on `FnOnce`)[https://doc.rust-lang.org/reference/types/closure.html]
-- (The mockall crate on Docs.rs)[https://docs.rs/mockall/latest/mockall/]
+- (The `mockall` crate on Docs.rs)[https://docs.rs/mockall/latest/mockall/]
 - Common Rust Ownership Errors (E0507, E0308)
 
 Thank you for checking out this challenge! By following the solution steps above, you should be able to mock and test an async function that takes a `FnOnce` closure without violating Rust’s ownership rules.

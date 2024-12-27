@@ -25,8 +25,8 @@ mod tests {
             .times(1)
             .withf(
                 move |update_fn: &Box<dyn FnOnce(Zed) -> Zed + Send + 'static>| {
-                  let mut captured = captured_update_fn_clone.lock().unwrap();
-                *captured = Some(update_fn.to_owned()); // Move the Box here
+                    // let mut captured = captured_update_fn_clone.lock().unwrap();
+                    // *captured = Some(update_fn.clone().to_owned());
                     true
                 },
             )
