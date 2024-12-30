@@ -1,9 +1,14 @@
+# Solution found!
+
+A fix has been found in the branch `solution`. Thank you for asomers for helping to find the solution.
+
 # Rust Mock Challenge: Testing `FnOnce` with `mockall`
 
 This repository contains a minimal reproduction of a tricky scenario involving mocking a function that accepts a `FnOnce` closure. Due to Rust’s ownership model, `FnOnce` closures cannot be trivially cloned or invoked through a shared reference. The goal is to test and validate that the closure is actually passed and can later be invoked or inspected.
 
 ## Table of Contents
 
+- [Solution found!](#solution-found)
 - [Rust Mock Challenge: Testing `FnOnce` with `mockall`](#rust-mock-challenge-testing-fnonce-with-mockall)
   - [Table of Contents](#table-of-contents)
   - [Context](#context)
