@@ -15,22 +15,18 @@ mod tests {
 
     #[tokio::test]
     async fn test_foo() {
-        let captured_update_fn: Arc<Mutex<Option<Box<dyn FnOnce(Zed) -> Zed + Send + 'static>>>> =
-            Arc::new(Mutex::new(None));
+        type FnBox = Box<dyn FnOnce(Zed) -> Zed + Send + 'static>;
+        let captured_update_fn: Arc<Mutex<Option<FnBox>>> = Arc::new(Mutex::new(None));
         let captured_update_fn_clone = Arc::clone(&captured_update_fn);
 
         let mut mock_foo = MockFoo::new();
         mock_foo
             .expect_bar()
             .times(1)
-            .withf(
-                move |update_fn: &Box<dyn FnOnce(Zed) -> Zed + Send + 'static>| {
-                    // let mut captured = captured_update_fn_clone.lock().unwrap();
-                    // *captured = Some(update_fn.clone().to_owned());
-                    true
-                },
-            )
-            .return_const(());
+            .returning(move |update_fn| {
+                let mut captured = captured_update_fn_clone.lock().unwrap();
+                *captured = Some(update_fn);
+            });
 
         let baz = BazImpl {};
         baz.baz(mock_foo).await;
